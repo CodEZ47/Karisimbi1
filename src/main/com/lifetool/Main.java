@@ -131,7 +131,9 @@ public class Main {
         System.out.println("Enter the user's email address:");
         // add validation here
         String email = scanner.nextLine();
-        boolean userOnboarded = UserMgmt.onBoardUser(email);
+        System.out.println("Enter the user's role: (Admin/Patient)");
+        String role = scanner.nextLine();
+        boolean userOnboarded = UserMgmt.onBoardUser(email, role);
         if (userOnboarded) {
             System.out.println("User onboarded successfully! :)");
         } else {
@@ -163,7 +165,8 @@ public class Main {
                     // Download Analytics
                     break;
                 case "5":
-                    // Onboard a New User
+                    onBoardUser(scanner);
+                
                     break;
                 case "0":
                     // Exit
