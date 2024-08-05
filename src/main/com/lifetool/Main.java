@@ -5,13 +5,17 @@ import main.com.lifetool.services.UserMgmt;
 import main.com.lifetool.models.User;
 import main.com.lifetool.models.Admin;
 // import main.com.lifetool.models.Patient;
+import main.com.lifetool.models.Patient;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         boolean quit = false;
 
+
+
         while (!quit) {
+            // clearScreen();
             System.out.println("------------------------------------------------------------");
             System.out.println("Welcome to the Life Prognosis Management Tool!!");
             System.out.println("------------------------------------------------------------");
@@ -25,10 +29,9 @@ public class Main {
             switch (choice) {
                 case 1:
                     // Login
-                    System.out.println("Logging in...");
                     String userRole = login(scanner);
-                    if (userRole == "Admin" || userRole == "Patient") {
-                        System.out.println("Login successful! :)");
+                    if (userRole.equals("Admin")|| userRole.equals("Patient")) {
+                        showLoadingSpinner("Logging in...");
                         manageAccount(scanner, userRole);
 
                     } else {
@@ -57,6 +60,32 @@ public class Main {
         scanner.close();
     }
 
+    private static void clearScreen() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
+
+    private static void showLoadingSpinner(String text) {
+        System.out.println(text);
+        String[] spinner = {"|", "/", "-", "\\"};
+        for (int i = 0; i < 10; i++) {
+            System.out.print("\rLoading " + spinner[i % spinner.length]);
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.print("\rDone!        \n");
+        System.out.println("------------------------------------");
+    }
+
     private static String login(Scanner scanner) {
         System.out.println("Enter your email address:");
         // add validation here
@@ -64,6 +93,7 @@ public class Main {
         System.out.println("Enter your password:");
         // add validation here
         String password = scanner.nextLine();
+
         String userRole = UserMgmt.login(email, password);
         return userRole;
     }
@@ -73,17 +103,19 @@ public class Main {
         String uuid = scanner.nextLine();
         System.out.println("Enter your email address:");
         String email = scanner.nextLine();
-        boolean verified = UserMgmt.verifyUUID(uuid, email);
-        if (verified) {
+        String role = UserMgmt.verifyUUID(uuid, email);
+        showLoadingSpinner("Verifying UUID...");
+        if (role.equals("Admin") || role.equals("Patient")) {
             System.out.println("UUID verified successfully! :)");
-            finalizeRegistration(scanner);
+            System.out.println("------------------------------------");
+            finalizeRegistration(scanner, email, uuid, role);
         } else {
             System.out.println("UUID verification failed. Please try again. :(");
         }
         
     }
 
-    private static void finalizeRegistration(Scanner scanner) {
+    private static void finalizeRegistration(Scanner scanner, String email, String uuid, String role) {
         System.out.println("Finalizing registration...");
         System.out.println("Enter your first name:");
         String firstName = scanner.nextLine();
@@ -95,27 +127,31 @@ public class Main {
         System.out.println("1. Yes");
         System.out.println("2. No");
         String hivPositive = scanner.nextLine();
-        if (hivPositive.equals("1")) {
-            hivPositive = "yes";
-        } else {
-            hivPositive = "no";
+        boolean hivStatus = hivPositive.equals("1") ? true : false;
+
+        if (!hivStatus){
+            System.out.println("This tool is only for HIV positive patients. Please consult your doctor for further assistance.");
+            return;
         }
 
-        if (hivPositive == "yes") {
+        String diagnosisDate = "";
+        String artStartDate = "";
+        boolean onARTStatus = false;
+
+        
+        if (hivStatus) {
             System.out.println("Enter your diagnosis date:");
-            String diagnosisDate = scanner.nextLine();
+            diagnosisDate = scanner.nextLine(); 
             System.out.println("Are you on ART?");
             System.out.println("1. Yes");
             System.out.println("2. No");
             String onART = scanner.nextLine();
-            if (onART.equals("1")) {
-                onART = "yes";
-            } else {
-                onART = "no";
-            }
-            if (onART == "yes") {
+            onARTStatus = onART.equals("1") ? true : false;
+            if (onARTStatus) {
                 System.out.println("Enter your ART start date:");
-                String artStartDate = scanner.nextLine();
+                artStartDate = scanner.nextLine();
+            }else{
+                artStartDate = "";
             }
         }
         System.out.println("Enter your country code:");
@@ -123,8 +159,16 @@ public class Main {
         System.out.println("Enter your password:");
         String password = scanner.nextLine();
 
+        String hPassword = UserMgmt.hashPassword(password);
 
-        
+        Patient user = new Patient(firstName, lastName, email, hPassword, role, dob, hivStatus, diagnosisDate, onARTStatus, artStartDate, countryCode, uuid);
+        boolean registered = UserMgmt.registerUser(user);
+
+        if (registered) {
+            System.out.println("Registration successful! :)");
+        } else {
+            System.out.println("Registration failed. Please try again. :(");
+        }
     }
 
     private static void onBoardUser(Scanner scanner) {
@@ -142,7 +186,7 @@ public class Main {
     }
 
     private static void manageAccount(Scanner scanner, String userRole) {
-        if(userRole == "Admin"){
+        if(userRole.equals("Admin")){
             System.out.println("1. View Profile");
             System.out.println("2. Update Profile");
             System.out.println("3. Download All User Data");

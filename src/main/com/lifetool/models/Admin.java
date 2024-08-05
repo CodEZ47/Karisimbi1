@@ -2,8 +2,8 @@ package main.com.lifetool.models;
 
 public class Admin extends User {
 
-    public Admin(String firstName, String lastName, String email, String hPassword) {
-        super(firstName, lastName, email, hPassword);
+    public Admin(String firstName, String lastName, String email, String hPassword, String role) {
+        super(firstName, lastName, email, hPassword, role);
         //TODO Auto-generated constructor stub
     }
 

@@ -10,9 +10,9 @@ public class Patient extends User {
     private String countryCode;
     private String uuidCode;
 
-    public Patient(String firstName, String lastName, String email, String hPassword, String dateOfBirth,
-    boolean hivPositive, String diagnosisDate, boolean onART, String artStartDate, String countryCode, String uuidCode){
-        super(firstName, lastName, email, hPassword);
+    public Patient(String firstName, String lastName, String email, String hPassword, String role, String dateOfBirth,
+                   boolean hivPositive, String diagnosisDate, boolean onART, String artStartDate, String countryCode, String uuidCode) {
+        super(firstName, lastName, email, hPassword, role);
         this.dateOfBirth = dateOfBirth;
         this.hivPositive = hivPositive;
         this.diagnosisDate = diagnosisDate;
@@ -34,5 +34,59 @@ public class Patient extends User {
         throw new UnsupportedOperationException("Unimplemented method 'updateProfile'");
     }
 
-    
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public boolean isHivPositive() {
+        return hivPositive;
+    }
+
+    public void setHivPositive(boolean hivPositive) {
+        this.hivPositive = hivPositive;
+    }
+
+    public String getDiagnosisDate() {
+        return diagnosisDate;
+    }
+
+    public void setDiagnosisDate(String diagnosisDate) {
+        this.diagnosisDate = diagnosisDate;
+    }
+
+    public boolean isOnART() {
+        return onART;
+    }
+
+    public void setOnART(boolean onART) {
+        this.onART = onART;
+    }
+
+    public String getArtStartDate() {
+        return artStartDate;
+    }
+
+    public void setArtStartDate(String artStartDate) {
+        this.artStartDate = artStartDate;
+    }
+
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
+
+    public String getUuidCode() {
+        return uuidCode;
+    }
+
+    public void setUuidCode(String uuidCode) {
+        this.uuidCode = uuidCode;
+    }
 }
