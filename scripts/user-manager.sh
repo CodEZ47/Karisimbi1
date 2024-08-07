@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 
 USER_STORE="./data/user-store.txt"
 

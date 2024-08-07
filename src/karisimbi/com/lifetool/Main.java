@@ -1,13 +1,19 @@
-package main.com.lifetool;
+package karisimbi.com.lifetool;
 
 import java.util.Scanner;
-import main.com.lifetool.services.UserMgmt;
-import main.com.lifetool.models.User;
-import main.com.lifetool.models.Admin;
-// import main.com.lifetool.models.Patient;
-import main.com.lifetool.models.Patient;
+
+import karisimbi.com.lifetool.models.Admin;
+import karisimbi.com.lifetool.models.Patient;
+import karisimbi.com.lifetool.models.User;
+import karisimbi.com.lifetool.services.UserMgmt;
 
 public class Main {
+
+    public static final String RESET = "\033[0m";
+    public static final String RED = "\033[0;31m";
+    public static final String GREEN = "\033[0;32m";
+    public static final String YELLOW = "\033[0;33m";
+    public static final String BLUE = "\033[0;34m";
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         boolean quit = false;

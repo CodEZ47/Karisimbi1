@@ -1,8 +1,9 @@
-package main.com.lifetool.services;
+package karisimbi.com.lifetool.services;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-import main.com.lifetool.models.Patient;
+import karisimbi.com.lifetool.models.Patient;
 
 public class UserMgmt {
     public static boolean onBoardUser(String email, String role){
