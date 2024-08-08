@@ -1,13 +1,20 @@
-package main.com.lifetool;
+package karisimbi.com.lifetool;
 
+import java.util.Arrays;
 import java.util.Scanner;
-import main.com.lifetool.services.UserMgmt;
-import main.com.lifetool.models.User;
-import main.com.lifetool.models.Admin;
-// import main.com.lifetool.models.Patient;
-import main.com.lifetool.models.Patient;
+
+import karisimbi.com.lifetool.models.Admin;
+import karisimbi.com.lifetool.models.Patient;
+import karisimbi.com.lifetool.models.User;
+import karisimbi.com.lifetool.services.UserMgmt;
 
 public class Main {
+
+    public static final String RESET = "\033[0m";
+    public static final String RED = "\033[0;31m";
+    public static final String GREEN = "\033[0;32m";
+    public static final String YELLOW = "\033[0;33m";
+    public static final String BLUE = "\033[0;34m";
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         boolean quit = false;
@@ -24,15 +31,16 @@ public class Main {
             System.out.println("0. Exit");
 
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:
-                    // Login
-                    String userRole = login(scanner);
-                    if (userRole.equals("Admin")|| userRole.equals("Patient")) {
+                    String[] user = login(scanner);
+                    String uuidCode = user[1];
+                    if (user[2].equals("Admin")|| user[2].equals("Patient")) {
                         showLoadingSpinner("Logging in...");
-                        manageAccount(scanner, userRole);
+                        System.out.println(user[1]);
+                        manageAccount(scanner, user, uuidCode);
 
                     } else {
                         System.out.println("Login failed. Please try again. :(");
@@ -86,7 +94,7 @@ public class Main {
         System.out.println("------------------------------------");
     }
 
-    private static String login(Scanner scanner) {
+    private static String[] login(Scanner scanner) {
         System.out.println("Enter your email address:");
         // add validation here
         String email = scanner.nextLine();
@@ -94,8 +102,8 @@ public class Main {
         // add validation here
         String password = scanner.nextLine();
 
-        String userRole = UserMgmt.login(email, password);
-        return userRole;
+        String[] user = UserMgmt.login(email, password);
+        return user;
     }
 
     private static void verifyUUID(Scanner scanner) {
@@ -185,8 +193,13 @@ public class Main {
         }
     }
 
-    private static void manageAccount(Scanner scanner, String userRole) {
+    private static void manageAccount(Scanner scanner, String[] user, String uuidCode) {
+        String userRole = user[2];
+        boolean quit = false;
+
         if(userRole.equals("Admin")){
+            while(!quit){
+            Admin admin = new Admin(user[4], user[5], user[0], user[3], user[2]);            
             System.out.println("1. View Profile");
             System.out.println("2. Update Profile");
             System.out.println("3. Download All User Data");
@@ -197,7 +210,7 @@ public class Main {
             String choice = scanner.nextLine();
             switch (choice) {
                 case "1":
-                    // View Profile
+                    admin.viewProfile();
                     break;
                 case "2":
                     // Update Profile
@@ -213,14 +226,16 @@ public class Main {
                 
                     break;
                 case "0":
-                    // Exit
+                    quit = true;
                     break;
                 default:
                     System.out.println("Invalid option. Please try again.");
                     break;
             }
         }
+        }
         else{
+            Patient patient = new Patient(user[0], user[1], user[3], user[4], user[2], user[5], Boolean.parseBoolean(user[6]), user[7], Boolean.parseBoolean(user[8]), user[9], user[10], uuidCode);
             System.out.println("1. View Profile");
             System.out.println("2. Update Profile");
             System.out.println("3. Download Files");
@@ -248,3 +263,5 @@ public class Main {
         
     }
 }
+
+// public static String calculateLifeExpectancy()

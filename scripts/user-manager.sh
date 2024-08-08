@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 
 USER_STORE="./data/user-store.txt"
 
@@ -15,8 +15,10 @@ function initializeFirstAdmin() {
     email="admin@gmail.com"
     role="Admin"
     hPassword=$(hash_password "admin")
+    firstName="Super"
+    lastName="Admin"
 
-    echo "$email,$uuid,$role,$hPassword" >> $USER_STORE
+    echo "$email,$uuid,$role,$hPassword,$firstName,$lastName" >> $USER_STORE
 }
 
 # Function to onboard a new user
@@ -54,7 +56,7 @@ function login_user() {
         stored_hashed_password=$(echo "$line" | awk -F, '{print $4}')
         
         if [[ "$stored_email" == "$email" && "$stored_hashed_password" == "$hashed_password" ]]; then
-            echo "$stored_role"
+            echo "$line";
             return
         fi
     done < "$USER_STORE"

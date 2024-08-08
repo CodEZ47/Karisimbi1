@@ -1,4 +1,4 @@
-package main.com.lifetool.models;
+package karisimbi.com.lifetool.models;
 
 public class Patient extends User {
 

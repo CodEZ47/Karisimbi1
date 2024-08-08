@@ -1,1 +1,5 @@
-admin@gmail.com,8463db34-2dc4-48d9-a97d-30be5b0d451a,Admin,8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+admin@gmail.com,a6b40c6f-339d-4610-9990-602d9250f520,Admin,8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918,Super,Admin
+patient@gmail.com,33783d21-bc15-4162-b734-d6ecc24e18c1,Patient,5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5,test,test,123456,true,123456,true,123456,rwa
+patient2@gmail.com,f981ab13-12eb-4c03-9996-c92f0f0f9e30,Patient
+admin2@gmail.com,a17502a5-da0c-4b0f-8dcd-7737de625bcf,Admin,8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918,Admin,Admin,12345678,true,1234567,true,1234567,rwa
+patients@gmail.com,dd5f81b2-f01d-4fb3-9eca-d8a58136a38e,Patient,5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5,Aklile,Mamo,12345678,true,12345678,true,12345678,eth
