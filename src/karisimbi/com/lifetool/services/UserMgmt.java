@@ -2,6 +2,9 @@ package karisimbi.com.lifetool.services;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Arrays;
+
+import javax.swing.text.Style;
 
 import karisimbi.com.lifetool.models.Patient;
 
@@ -31,21 +34,23 @@ public class UserMgmt {
         return false;
     }
 
-    public static String login(String email, String password) {
+    public static String[] login(String email, String password) {
         try {
             ProcessBuilder pb = new ProcessBuilder("bash", "./scripts/user-manager.sh", "login", email, password);
             pb.redirectErrorStream(true);
             Process process = pb.start();
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String role = reader.readLine(); 
-            System.out.println("Role: " + role);
+            String input = reader.readLine(); 
+            System.out.println("input: " + input);
+            String[] user = input.split(",");
             process.waitFor();
 
-            return role;
+            return user;
 
         } catch (Exception e) {
             e.printStackTrace();
-            return "";
+            String [] error = {};
+            return error;
         }
 
     }
