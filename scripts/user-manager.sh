@@ -97,20 +97,52 @@ registerUser() {
 
     newLine="$email,$uuid,$role,$hPassword,$firstName,$lastName,$dob,$isHivPositive,$diagnosisDate,$isOnArt,$artStartDate,$countryCode"
 
-    # Find the line with the email
     found_line=$(grep "^$email" "$USER_STORE")
     if [ -z "$found_line" ]; then
         echo "Error: User with email $email does not exist."
         return
     fi
-
-    # Extract the stored UUID from the found line
     stored_uuid=$(echo "$found_line" | awk -F'[ ,]' '{print $2}')
 
-    # Replace the line with the new content
     sed -i "s/^$email.*\$/$newLine/" "$USER_STORE"
 
     echo "User details updated successfully."
+}
+
+function registerAdmin(){
+    email=$1
+    role=$2
+    hPassword=$3
+    firstName=$4
+    lastName=$5
+
+    newLine="$email,$uuid,$role,$hPassword,$firstName,$lastName"
+
+    found_line=$(grep "^$email" "$USER_STORE")
+    if [ -z "$found_line" ]; then
+        echo "Error: User with email $email does not exist."
+        return
+    fi
+    stored_uuid=$(echo "$found_line" | awk -F'[ ,]' '{print $2}')
+
+    sed -i "s/^$email.*\$/$newLine/" "$USER_STORE"
+
+    echo "User details updated successfully."
+}
+
+
+function fetchUserByUUID(){
+    $uuid=$1
+
+    found_line = $(awk -F, -v uuid="$uuid" '$2 == uuid' $USER_STORE)
+
+    if [ -z "$found_line" ]; then
+        echo "Error: User with uuid $uuid does not exist."
+        exit 1
+        return
+    fi
+    echo "$found_line"
+
 }
 
 
@@ -139,7 +171,13 @@ case $1 in
     hashPassword)
         hash_password $2
         ;;
+    registerAdmin)
+        registerAdmin $2 $3 $4 $5 $6
+        ;;
+    fetchUserByUUID)
+        fetchUserByUUID $2
+        ;;
     *)
-        echo "Usage: $0 {onBoardUser|login|verifyUUID|registerUser|hash_password} args"
+        echo "Usage: $0 {onBoardUser|login|verifyUUID|registerUser|hash_password|registerAdmin|fetchUserByUUID} args"
         ;;
 esac

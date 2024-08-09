@@ -22,7 +22,7 @@ public class Main {
 
 
         while (!quit) {
-            // clearScreen();
+            clearScreen();
             System.out.println("------------------------------------------------------------");
             System.out.println("Welcome to the Life Prognosis Management Tool!!");
             System.out.println("------------------------------------------------------------");
@@ -124,53 +124,72 @@ public class Main {
     }
 
     private static void finalizeRegistration(Scanner scanner, String email, String uuid, String role) {
-        System.out.println("Finalizing registration...");
-        System.out.println("Enter your first name:");
-        String firstName = scanner.nextLine();
-        System.out.println("Enter your last name:");
-        String lastName = scanner.nextLine();
-        System.out.println("Enter your date of birth:");
-        String dob = scanner.nextLine();
-        System.out.println("Are you HIV positive?");
-        System.out.println("1. Yes");
-        System.out.println("2. No");
-        String hivPositive = scanner.nextLine();
-        boolean hivStatus = hivPositive.equals("1") ? true : false;
+        boolean registered = false;
+        if (role.equals("Admin")){
+            System.out.println("Finalizing registration...");
+            System.out.println("Enter your first name:");
+            String firstName = scanner.nextLine();
+            System.out.println("Enter your last name:");
+            String lastName = scanner.nextLine();
+            System.out.println("Enter your password:");
+            String password = scanner.nextLine();
 
-        if (!hivStatus){
-            System.out.println("This tool is only for HIV positive patients. Please consult your doctor for further assistance.");
-            return;
-        }
+            String hPassword = UserMgmt.hashPassword(password);
+            Admin user = new Admin(firstName, lastName, email, hPassword, role);
+            registered = UserMgmt.registerAdmin(user);
 
-        String diagnosisDate = "";
-        String artStartDate = "";
-        boolean onARTStatus = false;
-
-        
-        if (hivStatus) {
-            System.out.println("Enter your diagnosis date:");
-            diagnosisDate = scanner.nextLine(); 
-            System.out.println("Are you on ART?");
+        }else if(role.equals("Patient")){
+            System.out.println("Finalizing registration...");
+            System.out.println("Enter your first name:");
+            String firstName = scanner.nextLine();
+            System.out.println("Enter your last name:");
+            String lastName = scanner.nextLine();
+            System.out.println("Enter your date of birth:");
+            String dob = scanner.nextLine();
+            System.out.println("Are you HIV positive?");
             System.out.println("1. Yes");
             System.out.println("2. No");
-            String onART = scanner.nextLine();
-            onARTStatus = onART.equals("1") ? true : false;
-            if (onARTStatus) {
-                System.out.println("Enter your ART start date:");
-                artStartDate = scanner.nextLine();
-            }else{
-                artStartDate = "";
+            String hivPositive = scanner.nextLine();
+            boolean hivStatus = hivPositive.equals("1") ? true : false;
+
+            if (!hivStatus){
+                System.out.println("This tool is only for HIV positive patients. Please consult your doctor for further assistance.");
+                return;
             }
+
+            String diagnosisDate = "";
+            String artStartDate = "";
+            boolean onARTStatus = false;
+
+            
+            if (hivStatus) {
+                System.out.println("Enter your diagnosis date:");
+                diagnosisDate = scanner.nextLine(); 
+                System.out.println("Are you on ART?");
+                System.out.println("1. Yes");
+                System.out.println("2. No");
+                String onART = scanner.nextLine();
+                onARTStatus = onART.equals("1") ? true : false;
+                if (onARTStatus) {
+                    System.out.println("Enter your ART start date:");
+                    artStartDate = scanner.nextLine();
+                }else{
+                    artStartDate = "";
+                }
+            }
+            System.out.println("Enter your country code:");
+            String countryCode = scanner.nextLine();
+            System.out.println("Enter your password:");
+            String password = scanner.nextLine();
+
+            String hPassword = UserMgmt.hashPassword(password);
+            Patient user = new Patient(firstName, lastName, email, hPassword, role, dob, hivStatus, diagnosisDate, onARTStatus, artStartDate, countryCode, uuid);
+            registered = UserMgmt.registerUser(user);
         }
-        System.out.println("Enter your country code:");
-        String countryCode = scanner.nextLine();
-        System.out.println("Enter your password:");
-        String password = scanner.nextLine();
+        
 
-        String hPassword = UserMgmt.hashPassword(password);
-
-        Patient user = new Patient(firstName, lastName, email, hPassword, role, dob, hivStatus, diagnosisDate, onARTStatus, artStartDate, countryCode, uuid);
-        boolean registered = UserMgmt.registerUser(user);
+        
+        
 
         if (registered) {
             System.out.println("Registration successful! :)");
@@ -196,7 +215,10 @@ public class Main {
     private static void manageAccount(Scanner scanner, String[] user, String uuidCode) {
         String userRole = user[2];
         boolean quit = false;
-
+        clearScreen();
+        System.out.println("------------------------------------------------------------");
+        System.out.println("Welcome " + user[4] + " " + user[5] + "!");
+        System.out.println("------------------------------------------------------------");
         if(userRole.equals("Admin")){
             while(!quit){
             Admin admin = new Admin(user[4], user[5], user[0], user[3], user[2]);            
@@ -235,7 +257,8 @@ public class Main {
         }
         }
         else{
-            Patient patient = new Patient(user[0], user[1], user[3], user[4], user[2], user[5], Boolean.parseBoolean(user[6]), user[7], Boolean.parseBoolean(user[8]), user[9], user[10], uuidCode);
+            Patient patient = new Patient(user[4], user[5], user[0], user[3], user[2], user[6], Boolean.parseBoolean(user[7]), user[8], Boolean.parseBoolean(user[9]), user[10], user[11], uuidCode);
+            while(!quit){
             System.out.println("1. View Profile");
             System.out.println("2. Update Profile");
             System.out.println("3. Download Files");
@@ -244,7 +267,7 @@ public class Main {
             String choice = scanner.nextLine();
             switch (choice) {
                 case "1":
-                    // View Profile
+                    patient.viewProfile();
                     break;
                 case "2":
                     // Update Profile
@@ -253,15 +276,15 @@ public class Main {
                     // Download Files
                     break;
                 case "0":
-                    // Exit
+                    quit = true;
                     break;
                 default:
                     System.out.println("Invalid option. Please try again.");
                     break;
             }
         }
+        }
+
         
     }
 }
-
-// public static String calculateLifeExpectancy()

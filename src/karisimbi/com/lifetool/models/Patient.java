@@ -1,5 +1,8 @@
 package karisimbi.com.lifetool.models;
 
+import java.util.Scanner;
+import karisimbi.com.lifetool.services.UserMgmt;
+
 public class Patient extends User {
 
     private String dateOfBirth;
@@ -24,8 +27,27 @@ public class Patient extends User {
 
     @Override
     public void viewProfile() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'viewProfile'");
+
+        
+        
+        System.out.println( lastName + "'s Profile");
+        System.out.println("----------------------------------------------");
+        System.out.println("First Name: " + firstName);
+        System.out.println("Last Name: " + lastName);
+        System.out.println("Email: " + email);
+        System.out.println("Role: " + role);
+        System.out.println("Date of Birth: " + dateOfBirth);
+        System.out.println("HIV Positive: " + hivPositive);
+        System.out.println("Diagnosis Date: " + diagnosisDate);
+        System.out.println("On ART: " + onART);
+        System.out.println("ART Start Date: " + artStartDate);
+        System.out.println("Country Code: " + countryCode);
+        System.out.println("----------------------------------------------");
+        System.out.println("Press Enter to continue...");
+        Scanner scanner = new Scanner(System.in);
+        scanner.nextLine();
+        return;
+
     }
 
     @Override
