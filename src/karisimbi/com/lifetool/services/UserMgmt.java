@@ -189,8 +189,4 @@ public class UserMgmt {
         }
         return false;
     }
-    
-//     public static String calcLifeSpan(String dob, String countryCode,){
-//         try 
-//     }
 }

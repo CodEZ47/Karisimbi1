@@ -238,7 +238,7 @@ public class Main {
                     // Update Profile
                     break;
                 case "3":
-                    // Download All User Data
+                    admin.downloadAllUsersData();
                     break;
                 case "4":
                     // Download Analytics
