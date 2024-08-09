@@ -181,7 +181,7 @@ public class Main {
             String countryCode = scanner.nextLine();
             System.out.println("Enter your password:");
             String password = scanner.nextLine();
-
+            //Calculation Method Here
             String hPassword = UserMgmt.hashPassword(password);
             Patient user = new Patient(firstName, lastName, email, hPassword, role, dob, hivStatus, diagnosisDate, onARTStatus, artStartDate, countryCode, uuid);
             registered = UserMgmt.registerUser(user);
