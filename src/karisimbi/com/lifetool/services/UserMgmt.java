@@ -58,8 +58,7 @@ public class UserMgmt {
             pb.redirectErrorStream(true);
             Process process = pb.start();
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String input = reader.readLine(); 
-            System.out.println("input: " + input);
+            String input = reader.readLine();
             String[] user = input.split(",");
             process.waitFor();
 
@@ -189,8 +188,4 @@ public class UserMgmt {
         }
         return false;
     }
-    
-//     public static String calcLifeSpan(String dob, String countryCode,){
-//         try 
-//     }
 }

@@ -1,6 +1,8 @@
 #!/usr/bin/bash
 
 USER_STORE="./data/user-store.txt"
+DESTINATION_DIR="./downloads"
+ALL_USERS_CSV_FILE="$DESTINATION_DIR/all_users_data.csv"
 
 # echo "Arguments: $@"
 
@@ -116,14 +118,14 @@ function registerAdmin(){
     firstName=$4
     lastName=$5
 
-    newLine="$email,$uuid,$role,$hPassword,$firstName,$lastName"
-
     found_line=$(grep "^$email" "$USER_STORE")
     if [ -z "$found_line" ]; then
         echo "Error: User with email $email does not exist."
         return
     fi
     stored_uuid=$(echo "$found_line" | awk -F'[ ,]' '{print $2}')
+    
+    newLine="$email,$stored_uuid,$role,$hPassword,$firstName,$lastName"
 
     sed -i "s/^$email.*\$/$newLine/" "$USER_STORE"
 
@@ -143,6 +145,18 @@ function fetchUserByUUID(){
     fi
     echo "$found_line"
 
+}
+
+function download_all_user_data(){
+    awk 'BEGIN {OFS=","} {print $0}' "$USER_STORE" > "$ALL_USERS_CSV_FILE"
+
+    if [ $? -eq 0 ] && [ -s "$ALL_USERS_CSV_FILE" ]; then
+        echo "All users' data has been compiled into $ALL_USERS_CSV_FILE."
+        exit 0
+    else
+        echo "Failed to compile users' data."
+        exit 1
+    fi
 }
 
 
@@ -177,7 +191,10 @@ case $1 in
     fetchUserByUUID)
         fetchUserByUUID $2
         ;;
+    download_all_user_data)
+        download_all_user_data
+        ;;
     *)
-        echo "Usage: $0 {onBoardUser|login|verifyUUID|registerUser|hash_password|registerAdmin|fetchUserByUUID} args"
+        echo "Usage: $0 {onBoardUser|login|verifyUUID|registerUser|hash_password|registerAdmin|fetchUserByUUID|download_all_user_data} args"
         ;;
 esac

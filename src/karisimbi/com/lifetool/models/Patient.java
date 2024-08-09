@@ -27,9 +27,6 @@ public class Patient extends User {
 
     @Override
     public void viewProfile() {
-
-        
-        
         System.out.println( lastName + "'s Profile");
         System.out.println("----------------------------------------------");
         System.out.println("First Name: " + firstName);
@@ -52,8 +49,54 @@ public class Patient extends User {
 
     @Override
     public void updateProfile() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateProfile'");
+        Scanner scanner = new Scanner(System.in);
+        Boolean updated = false;
+        System.out.println("Updating your profile");
+        System.out.println("Enter your first name:");
+        String firstName = scanner.nextLine();
+        System.out.println("Enter your last name:");
+        String lastName = scanner.nextLine();
+        System.out.println("Enter your date of birth:");
+        String dob = scanner.nextLine();
+        System.out.println("Are you HIV positive?");
+        System.out.println("1. Yes");
+        System.out.println("2. No");
+        String hivPositive = scanner.nextLine();
+        boolean hivStatus = hivPositive.equals("1") ? true : false;
+        String diagnosisDate = "";
+        String artStartDate = "";
+        boolean onARTStatus = false;
+
+        
+        if (hivStatus) {
+            System.out.println("Enter your diagnosis date:");
+            diagnosisDate = scanner.nextLine(); 
+            System.out.println("Are you on ART?");
+            System.out.println("1. Yes");
+            System.out.println("2. No");
+            String onART = scanner.nextLine();
+            onARTStatus = onART.equals("1") ? true : false;
+            if (onARTStatus) {
+                System.out.println("Enter your ART start date:");
+                artStartDate = scanner.nextLine();
+            }else{
+                artStartDate = "";
+            }
+        }
+        System.out.println("Enter your country code:");
+        String countryCode = scanner.nextLine();
+        System.out.println("Enter your password:");
+        String password = scanner.nextLine();
+        //Calculation Method Here
+        String hPassword = UserMgmt.hashPassword(password);
+        Patient user = new Patient(firstName, lastName, email, hPassword, role, dob, hivStatus, diagnosisDate, onARTStatus, artStartDate, countryCode, uuidCode);
+        updated = UserMgmt.registerUser(user);
+
+        if (updated) {
+            System.out.println("User updated successfully!");
+        } else {
+            System.out.println("User update failed.");
+        }
     }
 
     public String getDateOfBirth() {

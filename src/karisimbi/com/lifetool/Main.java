@@ -15,7 +15,7 @@ public class Main {
     public static final String GREEN = "\033[0;32m";
     public static final String YELLOW = "\033[0;33m";
     public static final String BLUE = "\033[0;34m";
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Scanner scanner = new Scanner(System.in);
         boolean quit = false;
 
@@ -26,9 +26,9 @@ public class Main {
             System.out.println("------------------------------------------------------------");
             System.out.println("Welcome to the Life Prognosis Management Tool!!");
             System.out.println("------------------------------------------------------------");
-            System.out.println("1. Login");
-            System.out.println("2. Finalize Registration");
-            System.out.println("0. Exit");
+            System.out.println(YELLOW + "1." + RESET + " Login");
+            System.out.println(YELLOW + "2."+ RESET +  " Finalize Registration");
+            System.out.println(YELLOW + "0." + RESET +  " Exit");
 
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -36,10 +36,18 @@ public class Main {
             switch (choice) {
                 case 1:
                     String[] user = login(scanner);
+                    if (user.length <= 1) {
+                        System.out.println(RED + "Wrong email or password. Please try again." + RESET);
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    }
                     String uuidCode = user[1];
                     if (user[2].equals("Admin")|| user[2].equals("Patient")) {
                         showLoadingSpinner("Logging in...");
-                        System.out.println(user[1]);
                         manageAccount(scanner, user, uuidCode);
 
                     } else {
@@ -151,12 +159,6 @@ public class Main {
             System.out.println("2. No");
             String hivPositive = scanner.nextLine();
             boolean hivStatus = hivPositive.equals("1") ? true : false;
-
-            if (!hivStatus){
-                System.out.println("This tool is only for HIV positive patients. Please consult your doctor for further assistance.");
-                return;
-            }
-
             String diagnosisDate = "";
             String artStartDate = "";
             boolean onARTStatus = false;
@@ -235,10 +237,10 @@ public class Main {
                     admin.viewProfile();
                     break;
                 case "2":
-                    // Update Profile
+                    admin.updateProfile();
                     break;
                 case "3":
-                    // Download All User Data
+                    admin.downloadAllUsersData();
                     break;
                 case "4":
                     // Download Analytics
@@ -270,7 +272,7 @@ public class Main {
                     patient.viewProfile();
                     break;
                 case "2":
-                    // Update Profile
+                    patient.updateProfile();
                     break;
                 case "3":
                     // Download Files
