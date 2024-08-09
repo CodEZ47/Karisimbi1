@@ -51,7 +51,7 @@ public class Patient extends User {
     public void updateProfile() {
         Scanner scanner = new Scanner(System.in);
         Boolean updated = false;
-        System.out.println("Finalizing registration...");
+        System.out.println("Updating your profile");
         System.out.println("Enter your first name:");
         String firstName = scanner.nextLine();
         System.out.println("Enter your last name:");
@@ -63,12 +63,6 @@ public class Patient extends User {
         System.out.println("2. No");
         String hivPositive = scanner.nextLine();
         boolean hivStatus = hivPositive.equals("1") ? true : false;
-
-        if (!hivStatus){
-            System.out.println("This tool is only for HIV positive patients. Please consult your doctor for further assistance.");
-            return;
-        }
-
         String diagnosisDate = "";
         String artStartDate = "";
         boolean onARTStatus = false;
