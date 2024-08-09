@@ -83,7 +83,7 @@ function verifyUUID() {
 }
 
 # Function to register additional user details
-registerUser() {
+function registerUser() {
     firstName=$1
     lastName=$2
     email=$3
@@ -124,7 +124,7 @@ function registerAdmin(){
         return
     fi
     stored_uuid=$(echo "$found_line" | awk -F'[ ,]' '{print $2}')
-    
+
     newLine="$email,$stored_uuid,$role,$hPassword,$firstName,$lastName"
 
     sed -i "s/^$email.*\$/$newLine/" "$USER_STORE"
