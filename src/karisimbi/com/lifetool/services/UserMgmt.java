@@ -2,13 +2,31 @@ package karisimbi.com.lifetool.services;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-
-import javax.swing.text.Style;
 
 import karisimbi.com.lifetool.models.Patient;
+import karisimbi.com.lifetool.models.Admin;
 
 public class UserMgmt {
+
+    public static String[] fetchUserByUUID(String uuid) {
+        try {
+            ProcessBuilder pb = new ProcessBuilder("bash", "-c", "./scripts/user-manager.sh fetchUserByUUID " + uuid);
+            Process process = pb.start();
+            pb.redirectErrorStream(true);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String input = reader.readLine(); 
+            System.out.println("input: " + input);
+            String[] user = input.split(",");
+            process.waitFor();
+
+            return user;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            String [] error = {};
+            return error;
+        }
+    }
     public static boolean onBoardUser(String email, String role){
         // System.out.println(email + "this user has been onboarded");
         try {
@@ -141,4 +159,38 @@ public class UserMgmt {
         }
         return false;
     }
+
+    public static boolean registerAdmin(Admin user){
+        try {
+            String firstName = user.getFirstName();
+            String lastName = user.getLastName();
+            String email = user.getEmail();
+            String hPassword = user.getHPassword();
+            String role = user.getRole();
+
+            ProcessBuilder pb = new ProcessBuilder("bash", "-c", "./scripts/user-manager.sh registerAdmin " + email + " " + role + " " + hPassword + " " + firstName + " " + lastName);
+            Process process = pb.start();
+            pb.redirectErrorStream(true);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+            
+            int exitCode = process.waitFor();
+            if (exitCode == 0) {
+                return true;
+            } else {
+                System.err.println("Process exited with code: " + exitCode);
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+//     public static String calcLifeSpan(String dob, String countryCode,){
+//         try 
+//     }
 }
