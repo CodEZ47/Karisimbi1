@@ -1,6 +1,4 @@
-admin@gmail.com,a6b40c6f-339d-4610-9990-602d9250f520,Admin,5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5,Super,Admin
-newnewpatient@gmail.com,9183a4b1-dba3-4361-afcc-1c99188a0f3c,Patient,5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5,Fredirck,Lasta,12-12-2000,true,12-12-2024,true,12-12-2025,rwa
-new@g.com,a809b4fb-1c75-4fbb-a1c3-d971fdf9a85e,Patient,5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5,New,New,1,true,1,true,1,rwa
-newPatient@g.com,48d7262a-e617-409c-a8d1-9112d124eeda,Patient
-pat@gmail.com,b4e35e91-5fe9-4006-87df-63918d9646ea,Patient,5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5,New,Pat,1,true,1,true,1,rwa
-patient@gmail.com,7f8116d5-c424-49e2-a34f-6ff27b3492a4,Patient,03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4,Amuse,Muse,12-23-2000,true,12-12-2000,true,12-12-2000,rwa
+admin@gmail.com,b630bde6-ff97-4410-a364-8ca391010627,Admin,8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918,Super1,Admin
+secondadmin@gmail.com,cfe4145f-fcb6-42ee-873c-dea3297e527b,Admin,8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918,Second,Admin
+patient@gmail.com,554abbec-00af-4976-9970-8821b0127987,Patient,8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92,First,Patient1,12-12-2001,true,12-12-2023,true,12-12-2023,rwa
+patient2@gmail.com,bd32cb5e-aad7-4932-a7e7-122e858e4bd0,Patient,5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5,Second,Patient,12-12-1995,true,12-11-2020,true,12-12-2021,eth
