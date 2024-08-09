@@ -235,7 +235,7 @@ public class Main {
                     admin.viewProfile();
                     break;
                 case "2":
-                    // Update Profile
+                    admin.updateProfile();
                     break;
                 case "3":
                     admin.downloadAllUsersData();

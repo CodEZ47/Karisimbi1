@@ -118,14 +118,14 @@ function registerAdmin(){
     firstName=$4
     lastName=$5
 
-    newLine="$email,$uuid,$role,$hPassword,$firstName,$lastName"
-
     found_line=$(grep "^$email" "$USER_STORE")
     if [ -z "$found_line" ]; then
         echo "Error: User with email $email does not exist."
         return
     fi
     stored_uuid=$(echo "$found_line" | awk -F'[ ,]' '{print $2}')
+    
+    newLine="$email,$stored_uuid,$role,$hPassword,$firstName,$lastName"
 
     sed -i "s/^$email.*\$/$newLine/" "$USER_STORE"
 

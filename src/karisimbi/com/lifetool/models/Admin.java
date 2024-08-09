@@ -1,6 +1,9 @@
 package karisimbi.com.lifetool.models;
 
 import java.util.Scanner;
+
+import karisimbi.com.lifetool.services.UserMgmt;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
@@ -39,8 +42,25 @@ public class Admin extends User {
 
     @Override
     public void updateProfile() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateProfile'");
+        boolean updated = false;
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Update Your Profile");
+        System.out.println("Enter your first name:");
+        String firstName = scanner.nextLine();
+        System.out.println("Enter your last name:");
+        String lastName = scanner.nextLine();
+        System.out.println("Enter your password:");
+        String password = scanner.nextLine();
+
+        String hPassword = UserMgmt.hashPassword(password);
+        Admin user = new Admin(firstName, lastName, email, hPassword, "Admin");
+        updated = UserMgmt.registerAdmin(user);
+
+        if (updated) {
+            System.out.println("Admin updated successfully!");
+        } else {
+            System.out.println("Admin update failed.");
+        }
     }
     
 
