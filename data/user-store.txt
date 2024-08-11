@@ -1,4 +1,6 @@
-admin@gmail.com,b630bde6-ff97-4410-a364-8ca391010627,Admin,8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918,Super1,Admin
+admin@gmail.com,f77ba6d1-0b2b-44b5-bb4d-d7455f790b47,Admin,e86f78a8a3caf0b60d8e74e5942aa6d86dc150cd3c03338aef25b7d2d7e3acc7,SuperDuper,Admin
 secondadmin@gmail.com,cfe4145f-fcb6-42ee-873c-dea3297e527b,Admin,8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918,Second,Admin
 patient@gmail.com,554abbec-00af-4976-9970-8821b0127987,Patient,8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92,First,Patient1,12-12-2001,true,12-12-2023,true,12-12-2023,rwa
-patient2@gmail.com,bd32cb5e-aad7-4932-a7e7-122e858e4bd0,Patient,5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5,Second,Patient,12-12-1995,true,12-11-2020,true,12-12-2021,eth
+patient2@gmail.com,bd32cb5e-aad7-4932-a7e7-122e858e4bd0,Patient,5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5,Second,Patient,12-12-1995,true,12-11-2020,true,12-12-2021,ethuser@gmail.com,59428f4e-66b2-46b3-a364-addb330be6d4,Admin
+user@gmail.com,2dad1d73-fbf4-4f8b-bbb6-b8cca850607b,Admin,1b992a2bb0984ad12a5efc86fb260801e275d71419c7b748b5ff33a497af8423,Free,Last
+user2@gmail.com,f34fcf6b-f20e-4a64-a627-8012085c519e,Patient,5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5,fere,er,12-12-2000,true,12-09-2010,true,09-28-2015,rwa

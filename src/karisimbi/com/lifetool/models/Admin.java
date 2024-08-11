@@ -1,6 +1,7 @@
 package karisimbi.com.lifetool.models;
 
 import java.util.Scanner;
+import java.io.Console;
 
 import karisimbi.com.lifetool.services.UserMgmt;
 
@@ -27,7 +28,7 @@ public class Admin extends User {
 
     @Override
     public void viewProfile() {
-        System.out.println("Admin Profile");
+        System.out.println(lastName + "'s Profile");
         System.out.println("----------------------------------------------");
         System.out.println("First Name: " + firstName);
         System.out.println("Last Name: " + lastName);
@@ -44,17 +45,48 @@ public class Admin extends User {
     public void updateProfile() {
         boolean updated = false;
         Scanner scanner = new Scanner(System.in);
+        Console console = System.console();
         System.out.println("Update Your Profile");
-        System.out.println("Enter your first name:");
-        String firstName = scanner.nextLine();
-        System.out.println("Enter your last name:");
-        String lastName = scanner.nextLine();
-        System.out.println("Enter your password:");
-        String password = scanner.nextLine();
+        String firstName;
+            do {
+                System.out.println("Enter your first name:");
+                firstName = scanner.nextLine();
+                if (firstName.length() < 2 || !firstName.matches("[a-zA-Z]+")) {
+                    System.out.println(RED + "First name must be at least 2 letters long and contain only letters." + RESET);
+                }
+            } while (firstName.length() < 2 || !firstName.matches("[a-zA-Z]+"));
+            String lastName;
+            do {
+                System.out.println("Enter your last name:");
+                lastName = scanner.nextLine();
+                if (lastName.length() < 2 || !lastName.matches("[a-zA-Z]+")) {
+                    System.out.println(RED + "First name must be at least 2 letters long and contain only letters." + RESET);
+                }
+            } while (lastName.length() < 2 || !lastName.matches("[a-zA-Z]+"));
+            char[] passwordArray;
+            char[] confirmPasswordArray;
+            String password;
+            String confirmPassword = "";
+            do {
+                System.out.println("Enter your password:");
+                passwordArray = console.readPassword();
+                password = new String(passwordArray);
+                if (!UserMgmt.isValidPassword(password)) {
+                    System.out.println(RED + "Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, one number, and one special character." + RESET);
+                    continue;
+                }
 
-        String hPassword = UserMgmt.hashPassword(password);
-        Admin user = new Admin(firstName, lastName, email, hPassword, "Admin");
-        updated = UserMgmt.registerAdmin(user);
+                System.out.println("Confirm your password:");
+                confirmPasswordArray = console.readPassword();
+                confirmPassword = new String(confirmPasswordArray);
+                if (!password.equals(confirmPassword)) {
+                    System.out.println("Passwords do not match. Please try again.");
+                }
+            } while (!UserMgmt.isValidPassword(password) || !password.equals(confirmPassword));
+
+            String hPassword = UserMgmt.hashPassword(password);
+            Admin user = new Admin(firstName, lastName, email, hPassword, role);
+            updated = UserMgmt.registerAdmin(user);
 
         if (updated) {
             System.out.println("Admin updated successfully!");

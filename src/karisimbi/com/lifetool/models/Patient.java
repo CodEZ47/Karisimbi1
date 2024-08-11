@@ -1,6 +1,7 @@
 package karisimbi.com.lifetool.models;
 
 import java.util.Scanner;
+import java.io.Console;
 import karisimbi.com.lifetool.services.UserMgmt;
 
 public class Patient extends User {
@@ -50,43 +51,79 @@ public class Patient extends User {
     @Override
     public void updateProfile() {
         Scanner scanner = new Scanner(System.in);
+        Console console = System.console();
         Boolean updated = false;
         System.out.println("Updating your profile");
-        System.out.println("Enter your first name:");
-        String firstName = scanner.nextLine();
-        System.out.println("Enter your last name:");
-        String lastName = scanner.nextLine();
-        System.out.println("Enter your date of birth:");
-        String dob = scanner.nextLine();
-        System.out.println("Are you HIV positive?");
-        System.out.println("1. Yes");
-        System.out.println("2. No");
-        String hivPositive = scanner.nextLine();
-        boolean hivStatus = hivPositive.equals("1") ? true : false;
-        String diagnosisDate = "";
-        String artStartDate = "";
-        boolean onARTStatus = false;
-
-        
-        if (hivStatus) {
-            System.out.println("Enter your diagnosis date:");
-            diagnosisDate = scanner.nextLine(); 
-            System.out.println("Are you on ART?");
+        String firstName;
+            do {
+                System.out.println("Enter your first name:");
+                firstName = scanner.nextLine();
+                if (firstName.length() < 2 || !firstName.matches("[a-zA-Z]+")) {
+                    System.out.println(RED + "First name must be at least 2 letters long and contain only letters." + RESET);
+                }
+            } while (firstName.length() < 2 || !firstName.matches("[a-zA-Z]+"));
+            String lastName;
+            do {
+                System.out.println("Enter your last name:");
+                lastName = scanner.nextLine();
+                if (lastName.length() < 2 || !lastName.matches("[a-zA-Z]+")) {
+                    System.out.println(RED + "First name must be at least 2 letters long and contain only letters." + RESET);
+                }
+            } while (lastName.length() < 2 || !lastName.matches("[a-zA-Z]+"));
+            System.out.println("Enter your date of birth (MM-DD-YYYY):");
+            String dob = UserMgmt.getValidatedDate(scanner);
+            System.out.println("Are you HIV positive?");
             System.out.println("1. Yes");
             System.out.println("2. No");
-            String onART = scanner.nextLine();
-            onARTStatus = onART.equals("1") ? true : false;
-            if (onARTStatus) {
-                System.out.println("Enter your ART start date:");
-                artStartDate = scanner.nextLine();
-            }else{
-                artStartDate = "";
+            String hivPositive = UserMgmt.checkOption(scanner);
+            boolean hivStatus = hivPositive.equals("1") ? true : false;
+            String diagnosisDate = "00-00-0000";
+            String artStartDate = "00-00-0000";
+            boolean onARTStatus = false;
+
+            
+            if (hivStatus) {
+                System.out.println("Enter your diagnosis date:(MM-DD-YYYY)");
+                diagnosisDate = UserMgmt.getValidatedDate(scanner);
+                System.out.println("Are you on ART?");
+                System.out.println("1. Yes");
+                System.out.println("2. No");
+                String onART = UserMgmt.checkOption(scanner);
+                onARTStatus = onART.equals("1") ? true : false;
+                if (onARTStatus) {
+                    System.out.println("Enter your ART start date:(MM-DD-YYYY)");
+                    artStartDate = UserMgmt.getValidatedDate(scanner);
+                }else{
+                    artStartDate = "";
+                }
             }
-        }
-        System.out.println("Enter your country code:");
-        String countryCode = scanner.nextLine();
-        System.out.println("Enter your password:");
-        String password = scanner.nextLine();
+            
+            System.out.println("Enter your country code:");
+            String countryCode = scanner.nextLine();
+
+            char[] passwordArray;
+            char[] confirmPasswordArray;
+            String password;
+            String confirmPassword = "";
+            do {
+                System.out.println("Enter your password:");
+                passwordArray = console.readPassword();
+                password = new String(passwordArray);
+                if (!UserMgmt.isValidPassword(password)) {
+                    System.out.println(RED + "Password must be at least 8 characters long, include at least one uppercase letter, one lowercase letter, one number, and one special character." + RESET);
+                    continue;
+                }
+
+                System.out.println("Confirm your password:");
+                confirmPasswordArray = console.readPassword();
+                confirmPassword = new String(confirmPasswordArray);
+                if (!password.equals(confirmPassword)) {
+                    System.out.println("Passwords do not match. Please try again.");
+                }
+            } while (!UserMgmt.isValidPassword(password) || !password.equals(confirmPassword));
+
+            
+        
         //Calculation Method Here
         String hPassword = UserMgmt.hashPassword(password);
         Patient user = new Patient(firstName, lastName, email, hPassword, role, dob, hivStatus, diagnosisDate, onARTStatus, artStartDate, countryCode, uuidCode);

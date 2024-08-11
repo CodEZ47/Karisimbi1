@@ -1,7 +1,11 @@
 package karisimbi.com.lifetool.services;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.*;
+import java.util.regex.*;
 
 import karisimbi.com.lifetool.models.Patient;
 import karisimbi.com.lifetool.models.Admin;
@@ -103,6 +107,63 @@ public class UserMgmt {
             e.printStackTrace();
             return "";
         }
+    }
+
+    public static boolean isValidPassword(String password) {
+        return password.length() >= 8 &&
+                Pattern.compile("[A-Z]").matcher(password).find() &&
+                Pattern.compile("[a-z]").matcher(password).find() &&
+                Pattern.compile("[0-9]").matcher(password).find() &&
+                Pattern.compile("[^a-zA-Z0-9]").matcher(password).find();
+    }
+
+    public static String getValidatedDate(Scanner scanner) {
+        String date;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+        LocalDate today = LocalDate.now();
+
+        while (true) {
+            date = scanner.nextLine();
+            if (isValidDate(date)) {
+                try {
+                    LocalDate enteredDate = LocalDate.parse(date, formatter);
+                    if (enteredDate.isBefore(today.plusDays(1))) {
+                        break;
+                    } else {
+                        System.out.println("Date cannot be in the future. Please enter a valid date:");
+                    }
+                } catch (DateTimeParseException e) {
+                    System.out.println("Invalid date format. Please enter the date in MM-DD-YYYY format:");
+                }
+            } else {
+                System.out.println("Invalid date format. Please enter the date in MM-DD-YYYY format:");
+            }
+        }
+        return date;
+    }
+
+    private static boolean isValidDate(String date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+        try {
+            LocalDate parsedDate = LocalDate.parse(date, formatter);
+            String reformattedDate = parsedDate.format(formatter);
+            return date.equals(reformattedDate);
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+    }
+
+    public static String checkOption(Scanner scanner) {
+        String option;
+        while (true) {
+            option = scanner.nextLine();
+            if (option.equals("1") || option.equals("2")) {
+                break;
+            } else {
+                System.out.println("Invalid option. Please enter 1 or 2:");
+            }
+        }
+        return option;
     }
 
     public static boolean registerUser(Patient user) {
