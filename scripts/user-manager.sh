@@ -3,6 +3,7 @@
 USER_STORE="./data/user-store.txt"
 DESTINATION_DIR="./downloads"
 ALL_USERS_CSV_FILE="$DESTINATION_DIR/all_users_data.csv"
+LIFE_EXPECTANCY="./data/life-expectancy.csv"
 
 # echo "Arguments: $@"
 
@@ -57,6 +58,7 @@ function login_user() {
         stored_role=$(echo "$line" | awk -F, '{print $3}')
         stored_hashed_password=$(echo "$line" | awk -F, '{print $4}')
         
+        # echo "Stored email: $stored_email, Stored role: $stored_role, Stored hashed password: $stored_hashed_password, Hashed password: $hashed_password"
         if [[ "$stored_email" == "$email" && "$stored_hashed_password" == "$hashed_password" ]]; then
             echo "$line";
             return
@@ -96,8 +98,9 @@ function registerUser() {
     countryCode=${10}
     uuid=${11}
     role=${12}
+    expectedLifeSpan=${13}
 
-    newLine="$email,$uuid,$role,$hPassword,$firstName,$lastName,$dob,$isHivPositive,$diagnosisDate,$isOnArt,$artStartDate,$countryCode"
+    newLine="$email,$uuid,$role,$hPassword,$firstName,$lastName,$dob,$isHivPositive,$diagnosisDate,$isOnArt,$artStartDate,$countryCode,$expectedLifeSpan"
 
     found_line=$(grep "^$email" "$USER_STORE")
     if [ -z "$found_line" ]; then
@@ -159,6 +162,34 @@ function download_all_user_data(){
     fi
 }
 
+function get_country_code() {
+    country=$1
+    countryCode=$(awk -F, -v country="$country" '
+    BEGIN {IGNORECASE=1}
+    $1 == country {print $5; exit}
+    ' "$LIFE_EXPECTANCY")
+
+    if [ -z "$countryCode" ]; then
+        echo "NOT_FOUND"
+    else
+        echo "$countryCode"
+    fi
+}
+
+# Function to get the life expectancy for a country code
+function get_life_expectancy() {
+    local countryCode=$1
+    local lifeExpectancy=$(awk -F, -v countryCode="$countryCode" '
+    $6 == countryCode {print $7; exit}
+    ' "$LIFE_EXPECTANCY")
+
+    if [ -z "$lifeExpectancy" ]; then
+        echo "NOT_FOUND"
+    else
+        echo "$lifeExpectancy"
+    fi
+}
+
 
 # Check if user store file exists, if not, create and initialize with first admin
 if [[ ! -f $USER_STORE ]]; then
@@ -180,7 +211,7 @@ case $1 in
         verifyUUID $2 $3
         ;;
     registerUser)
-        registerUser $2 $3 $4 $5 $6 $7 $8 $9 ${10} ${11} ${12} ${13}
+        registerUser $2 $3 $4 $5 $6 $7 $8 $9 ${10} ${11} ${12} ${13} ${14}
         ;;
     hashPassword)
         hash_password $2
@@ -194,7 +225,13 @@ case $1 in
     download_all_user_data)
         download_all_user_data
         ;;
+    getCountryCode)
+        get_country_code $2
+        ;;
+    getLifeExpectancy)
+        get_life_expectancy $2
+        ;;
     *)
-        echo "Usage: $0 {onBoardUser|login|verifyUUID|registerUser|hash_password|registerAdmin|fetchUserByUUID|download_all_user_data} args"
+        echo "Usage: $0 {onBoardUser|login|verifyUUID|registerUser|hash_password|registerAdmin|fetchUserByUUID|download_all_user_data|getCountryCode|getLifeExpectancy} args"
         ;;
 esac

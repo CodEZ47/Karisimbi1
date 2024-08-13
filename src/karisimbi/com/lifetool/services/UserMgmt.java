@@ -2,6 +2,7 @@ package karisimbi.com.lifetool.services;
 
 import java.io.*;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
@@ -11,6 +12,11 @@ import karisimbi.com.lifetool.models.Patient;
 import karisimbi.com.lifetool.models.Admin;
 
 public class UserMgmt {
+    public static final String RESET = "\033[0m";
+    public static final String RED = "\033[0;31m";
+    public static final String GREEN = "\033[0;32m";
+    public static final String YELLOW = "\033[0;33m";
+    public static final String BLUE = "\033[0;34m";
 
     public static String[] fetchUserByUUID(String uuid) {
         try {
@@ -181,6 +187,7 @@ public class UserMgmt {
             String countryCode = user.getCountryCode();
             String uuid = user.getUuidCode();
             String role = user.getRole();
+            String expectedLifeSpan = user.getExpectedLife();
 
             System.out.println("First Name: " + firstName);
             System.out.println("Last Name: " + lastName);
@@ -192,11 +199,12 @@ public class UserMgmt {
             System.out.println("On ART: " + onARTStatus);
             System.out.println("ART Start Date: " + artStartDate);
             System.out.println("Country Code: " + countryCode);
+            System.out.println("Expected Lifespan: " + expectedLifeSpan);
             System.out.println("UUID: " + uuid);
             System.out.println("Role: " + role);
 
 
-            ProcessBuilder pb = new ProcessBuilder("bash", "-c", "./scripts/user-manager.sh registerUser " + firstName + " " + lastName + " " + email + " " + hPassword + " " + dob + " " + hivStatus + " " + diagnosisDate + " " + onARTStatus + " " + artStartDate + " " + countryCode + " " + uuid + " " + role);
+            ProcessBuilder pb = new ProcessBuilder("bash", "-c", "./scripts/user-manager.sh registerUser " + firstName + " " + lastName + " " + email + " " + hPassword + " " + dob + " " + hivStatus + " " + diagnosisDate + " " + onARTStatus + " " + artStartDate + " " + countryCode + " " + uuid + " " + role + " " + expectedLifeSpan);
 
             Process process = pb.start();
             pb.redirectErrorStream(true);
@@ -206,6 +214,7 @@ public class UserMgmt {
             while ((line = reader.readLine()) != null) {
                 System.out.println(line);
             }
+
 
             
             int exitCode = process.waitFor();
@@ -248,5 +257,75 @@ public class UserMgmt {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public static String fetchCountryCode(Scanner scanner, String country) {
+        String countryCode = "";
+        do {
+            try {
+                ProcessBuilder pb = new ProcessBuilder("bash", "-c", "./scripts/user-manager.sh getCountryCode " + country);
+                Process process = pb.start();
+                pb.redirectErrorStream(true);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                countryCode = reader.readLine();
+                process.waitFor();
+        
+                if (countryCode.equals("NOT_FOUND")) {
+                    System.out.println(RED + "Country not found. Please enter a valid country." + RESET);
+                    country = scanner.nextLine();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                countryCode = "NOT_FOUND";
+            }
+        } while (countryCode.equals("NOT_FOUND"));
+        
+        System.out.println("Country code for " + country + " is " + countryCode);
+        return countryCode;
+    }
+
+
+    public static String calculateLifespan(String dob, boolean hivStatus, String diagnosisDate, boolean artStatus, String artStartDate, String countryCode) {
+        try {
+            ProcessBuilder pb = new ProcessBuilder("bash", "-c", "./scripts/user-manager.sh getLifeExpectancy " + countryCode);
+            Process process = pb.start();
+            pb.redirectErrorStream(true);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String lifeExpectancyStr = reader.readLine();
+            process.waitFor();
+
+            if (lifeExpectancyStr.equals("NOT_FOUND")) {
+                return "0";
+            }
+
+            double lifeExpectancy = Double.parseDouble(lifeExpectancyStr);
+            System.out.println(lifeExpectancy);
+            int currentAge = calculateAge(dob, LocalDate.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy")));
+            int ageAtDiagnosis = calculateAge(dob, diagnosisDate);
+            int ageAtStartART = calculateAge(dob, artStartDate);
+            double remainingYears = (lifeExpectancy - currentAge)* 0.9;
+            double survivalCoef = 0.9;
+            int delay = ageAtStartART - ageAtDiagnosis;
+            for (int i = 0; i < delay; i++) {
+                remainingYears *= survivalCoef;
+                System.out.println("Hahahaha---"+i);
+            }
+            String lifespan = String.valueOf((int)Math.ceil(remainingYears));
+            return lifespan;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "0";
+        }
+    }
+
+    private static int calculateAge(String dob, String eventDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+
+        LocalDate dateOfBirth = LocalDate.parse(dob, formatter);
+        LocalDate eventLocalDate = LocalDate.parse(eventDate, formatter);
+        Period period = Period.between(dateOfBirth, eventLocalDate);
+        System.out.println(period.getYears());
+        return period.getYears();
     }
 }

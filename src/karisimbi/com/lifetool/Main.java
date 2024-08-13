@@ -77,14 +77,14 @@ public class Main {
     }
 
     private static void clearScreen() {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        // try {
+        //     Thread.sleep(1000);
+        // } catch (InterruptedException e) {
+        //     e.printStackTrace();
+        // }
     
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
+        // System.out.print("\033[H\033[2J");
+        // System.out.flush();
     }
 
     private static void showLoadingSpinner(String text) {
@@ -103,10 +103,13 @@ public class Main {
     }
 
     private static String[] login(Scanner scanner, Console console) {
+        char [] passwordArray;
+        String password;
         System.out.println("Enter your email address:");
         String email = scanner.nextLine();
         System.out.println("Enter your password:");
-        String password = new String(console.readPassword());
+        passwordArray = console.readPassword();
+        password = new String(passwordArray);
 
         String[] user = UserMgmt.login(email, password);
         return user;
@@ -226,8 +229,10 @@ public class Main {
                 }
             }
             
-            System.out.println("Enter your country code:");
-            String countryCode = scanner.nextLine();
+            System.out.println("Enter your country:");
+            String country = scanner.nextLine();
+
+            String countryCode = UserMgmt.fetchCountryCode(scanner,country);
 
             char[] passwordArray;
             char[] confirmPasswordArray;
@@ -250,9 +255,9 @@ public class Main {
                 }
             } while (!UserMgmt.isValidPassword(password) || !password.equals(confirmPassword));
 
-            //Calculation Method Here
+            String expectedLifeSpan = UserMgmt.calculateLifespan(dob, hivStatus, diagnosisDate, onARTStatus, artStartDate, countryCode);
             String hPassword = UserMgmt.hashPassword(password);
-            Patient user = new Patient(firstName, lastName, email, hPassword, role, dob, hivStatus, diagnosisDate, onARTStatus, artStartDate, countryCode, uuid);
+            Patient user = new Patient(firstName, lastName, email, hPassword, role, dob, hivStatus, diagnosisDate, onARTStatus, artStartDate, countryCode, uuid, expectedLifeSpan);
             registered = UserMgmt.registerUser(user);
         }
         
@@ -269,10 +274,10 @@ public class Main {
 
     private static void onBoardUser(Scanner scanner) {
         System.out.println("Enter the user's email address:");
-        // add validation here
         String email = scanner.nextLine();
         System.out.println("Enter the user's role: (Admin/Patient)");
         String role = scanner.nextLine();
+        //add validation for role
         boolean userOnboarded = UserMgmt.onBoardUser(email, role);
         if (userOnboarded) {
             System.out.println("User onboarded successfully! :)");
@@ -328,7 +333,7 @@ public class Main {
         }
         }
         else{
-            Patient patient = new Patient(user[4], user[5], user[0], user[3], user[2], user[6], Boolean.parseBoolean(user[7]), user[8], Boolean.parseBoolean(user[9]), user[10], user[11], uuidCode);
+            Patient patient = new Patient(user[4], user[5], user[0], user[3], user[2], user[6], Boolean.parseBoolean(user[7]), user[8], Boolean.parseBoolean(user[9]), user[10], user[11], uuidCode, user[12]);
             while(!quit){
             System.out.println("------------------------------------------------------------");
             System.out.println("Welcome " + user[4] + " " + user[5] + "!");

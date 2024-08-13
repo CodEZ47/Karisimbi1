@@ -13,9 +13,10 @@ public class Patient extends User {
     private String artStartDate;
     private String countryCode;
     private String uuidCode;
+    private String expectedLife;
 
     public Patient(String firstName, String lastName, String email, String hPassword, String role, String dateOfBirth,
-                   boolean hivPositive, String diagnosisDate, boolean onART, String artStartDate, String countryCode, String uuidCode) {
+                   boolean hivPositive, String diagnosisDate, boolean onART, String artStartDate, String countryCode, String uuidCode, String expectedLife) {
         super(firstName, lastName, email, hPassword, role);
         this.dateOfBirth = dateOfBirth;
         this.hivPositive = hivPositive;
@@ -24,6 +25,7 @@ public class Patient extends User {
         this.artStartDate = artStartDate;
         this.countryCode = countryCode;
         this.uuidCode = uuidCode;
+        this.expectedLife = expectedLife;
     }
 
     @Override
@@ -40,6 +42,7 @@ public class Patient extends User {
         System.out.println("On ART: " + onART);
         System.out.println("ART Start Date: " + artStartDate);
         System.out.println("Country Code: " + countryCode);
+        System.out.println("Expected Lifespan: " + expectedLife);
         System.out.println("----------------------------------------------");
         System.out.println("Press Enter to continue...");
         Scanner scanner = new Scanner(System.in);
@@ -98,8 +101,10 @@ public class Patient extends User {
                 }
             }
             
-            System.out.println("Enter your country code:");
-            String countryCode = scanner.nextLine();
+            System.out.println("Enter your country:");
+            String country = scanner.nextLine();
+
+            String countryCode = UserMgmt.fetchCountryCode(scanner,country);
 
             char[] passwordArray;
             char[] confirmPasswordArray;
@@ -124,9 +129,9 @@ public class Patient extends User {
 
             
         
-        //Calculation Method Here
+        String expectedLifeSpan = UserMgmt.calculateLifespan(dob, hivStatus, diagnosisDate, onARTStatus, artStartDate, countryCode);
         String hPassword = UserMgmt.hashPassword(password);
-        Patient user = new Patient(firstName, lastName, email, hPassword, role, dob, hivStatus, diagnosisDate, onARTStatus, artStartDate, countryCode, uuidCode);
+        Patient user = new Patient(firstName, lastName, email, hPassword, role, dob, hivStatus, diagnosisDate, onARTStatus, artStartDate, countryCode, uuidCode, expectedLifeSpan);
         updated = UserMgmt.registerUser(user);
 
         if (updated) {
@@ -190,5 +195,13 @@ public class Patient extends User {
 
     public void setUuidCode(String uuidCode) {
         this.uuidCode = uuidCode;
+    }
+
+    public String getExpectedLife() {
+        return expectedLife;
+    }
+
+    public void setExpectedLife(String expectedLife) {
+        this.expectedLife = expectedLife;
     }
 }
