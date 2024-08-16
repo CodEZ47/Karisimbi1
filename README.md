@@ -7,6 +7,8 @@ command - javac -cp src src/karisimbi/com/lifetool/Main.java
 
 You can run the whole project from the Main.java file in the src/karisimbi/com/lifetool directory.
 
+You can run the generateFakeUsers.sh script to generate a list of 100 random users.
+
 
 
 Made by Karisimbi 1
