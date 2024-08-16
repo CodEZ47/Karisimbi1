@@ -1,5 +1,4 @@
-admin@gmail.com,fcdb9a09-a467-4ffc-81af-574ff7de62a2,Admin,8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918,Super,Admin
-patient@gmail.com,bb21f2c1-0526-48e7-be1b-ceaefe3b25ef,Patient,b890864a52254182ddc60596eb57582aa94b57994ed045fef5b3af50f1844d62,Mike,Stellasky,12-20-2000,true,12-20-2018,true,12-20-2020,EGY
-test@gmail.com,bacadcc2-6968-4d59-9dc7-be00e2a2ad7a,Patient,8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267e,Test,Man,12-12-2000,true,12-12-2001,true,12-12-2002,RWA,34
-admin2@gmail.com,b4552f71-12b7-4563-ba66-0c65d46d2d83,Admin,e86f78a8a3caf0b60d8e74e5942aa6d86dc150cd3c03338aef25b7d2d7e3acc7,Second,Admin
-pat@gmail.com,2d7b969d-e059-4b83-b5b3-41f9a9331b1a,Patient,b890864a52254182ddc60596eb57582aa94b57994ed045fef5b3af50f1844d62,Pat,Pat,08-12-2000,true,12-12-2020,true,12-12-2022,RUS,34
+admin@gmail.com,e77b7be9-f973-439c-be17-7b9adb9d098f,Admin,8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918,Super,Admin
+secondadmin@gmail.com,e75a7472-9f70-4a4c-a074-3119c60d5fb6,Admin,e86f78a8a3caf0b60d8e74e5942aa6d86dc150cd3c03338aef25b7d2d7e3acc7,Second,Admin
+patient@gmail.com,35ae51f3-a61b-43a3-b971-a8b1da2178bb,Patient,b890864a52254182ddc60596eb57582aa94b57994ed045fef5b3af50f1844d62,First,Patient,12-12-2000,true,12-12-2018,true,12-12-2021,RUS,31
+patient2@gmail.com,205eb2f6-7bc4-410b-b2b0-34fe6ca94ee0,Patient,b890864a52254182ddc60596eb57582aa94b57994ed045fef5b3af50f1844d62,Second,Patient,12-12-2000,true,12-12-2020,true,12-12-2020,RWA,39

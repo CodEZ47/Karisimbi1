@@ -299,7 +299,7 @@ public class UserMgmt {
             }
 
             double lifeExpectancy = Double.parseDouble(lifeExpectancyStr);
-            System.out.println(lifeExpectancy);
+            // System.out.println(lifeExpectancy);
             int currentAge = calculateAge(dob, LocalDate.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy")));
             int ageAtDiagnosis = calculateAge(dob, diagnosisDate);
             int ageAtStartART = calculateAge(dob, artStartDate);
@@ -308,7 +308,7 @@ public class UserMgmt {
             int delay = ageAtStartART - ageAtDiagnosis;
             for (int i = 0; i < delay; i++) {
                 remainingYears *= survivalCoef;
-                System.out.println("Hahahaha---"+i);
+                // System.out.println("Hahahaha---"+i);
             }
             String lifespan = String.valueOf((int)Math.ceil(remainingYears));
             return lifespan;
@@ -325,7 +325,7 @@ public class UserMgmt {
         LocalDate dateOfBirth = LocalDate.parse(dob, formatter);
         LocalDate eventLocalDate = LocalDate.parse(eventDate, formatter);
         Period period = Period.between(dateOfBirth, eventLocalDate);
-        System.out.println(period.getYears());
+        // System.out.println(period.getYears());
         return period.getYears();
     }
 }

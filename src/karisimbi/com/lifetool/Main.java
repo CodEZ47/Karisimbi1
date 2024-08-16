@@ -77,14 +77,14 @@ public class Main {
     }
 
     private static void clearScreen() {
-        // try {
-        //     Thread.sleep(1000);
-        // } catch (InterruptedException e) {
-        //     e.printStackTrace();
-        // }
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     
-        // System.out.print("\033[H\033[2J");
-        // System.out.flush();
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 
     private static void showLoadingSpinner(String text) {
@@ -127,7 +127,7 @@ public class Main {
             System.out.println("------------------------------------");
             finalizeRegistration(scanner, console, email, uuid, role);
         } else {
-            System.out.println("UUID verification failed. Please try again. :(");
+            System.out.println(RED + "UUID verification failed. Please try again. :(" +RESET);
         }
         
     }
@@ -175,7 +175,7 @@ public class Main {
                 confirmPasswordArray = console.readPassword();
                 confirmPassword = new String(confirmPasswordArray);
                 if (!password.equals(confirmPassword)) {
-                    System.out.println("Passwords do not match. Please try again.");
+                    System.out.println(RED + "Passwords do not match. Please try again." + RESET);
                 }
             } while (!UserMgmt.isValidPassword(password) || !password.equals(confirmPassword));
 
@@ -251,7 +251,7 @@ public class Main {
                 confirmPasswordArray = console.readPassword();
                 confirmPassword = new String(confirmPasswordArray);
                 if (!password.equals(confirmPassword)) {
-                    System.out.println("Passwords do not match. Please try again.");
+                    System.out.println(RED + "Passwords do not match. Please try again." + RESET);
                 }
             } while (!UserMgmt.isValidPassword(password) || !password.equals(confirmPassword));
 
@@ -293,15 +293,15 @@ public class Main {
         if(userRole.equals("Admin")){
             while(!quit){
             Admin admin = new Admin(user[4], user[5], user[0], user[3], user[2]);   
-            System.out.println("------------------------------------------------------------");
+            System.out.println(BLUE + "------------------------------------------------------------");
             System.out.println("Welcome " + user[4] + " " + user[5] + "!");
-            System.out.println("------------------------------------------------------------");         
-            System.out.println("1. View Profile");
-            System.out.println("2. Update Profile");
-            System.out.println("3. Download All User Data");
-            System.out.println("4. Download Analytics");
-            System.out.println("5. Onboard a New User");
-            System.out.println("0. Exit");
+            System.out.println("------------------------------------------------------------" + RESET);         
+            System.out.println(YELLOW + "1."+ RESET +" View Profile");
+            System.out.println(YELLOW + "2."+ RESET +" Update Profile");
+            System.out.println(YELLOW + "3."+ RESET +" Download All User Data");
+            System.out.println(YELLOW + "4."+ RESET +" Download Analytics");
+            System.out.println(YELLOW + "5."+ RESET +" Onboard a New User");
+            System.out.println(YELLOW + "0."+ RESET +" Exit");
 
             String choice = scanner.nextLine();
             switch (choice) {
@@ -311,17 +311,22 @@ public class Main {
                     clearScreen();
                     break;
                 case "2":
+                    clearScreen();
                     admin.updateProfile();
+                    clearScreen();
                     break;
                 case "3":
+                    clearScreen();
                     admin.downloadAllUsersData();
+                    clearScreen();
                     break;
                 case "4":
-                    // Download Analytics
+                    clearScreen();
+                    admin.downloadAnalytics();
+                    clearScreen();
                     break;
                 case "5":
                     onBoardUser(scanner);
-                
                     break;
                 case "0":
                     quit = true;
@@ -335,24 +340,24 @@ public class Main {
         else{
             Patient patient = new Patient(user[4], user[5], user[0], user[3], user[2], user[6], Boolean.parseBoolean(user[7]), user[8], Boolean.parseBoolean(user[9]), user[10], user[11], uuidCode, user[12]);
             while(!quit){
-            System.out.println("------------------------------------------------------------");
+            System.out.println(BLUE + "------------------------------------------------------------");
             System.out.println("Welcome " + user[4] + " " + user[5] + "!");
-            System.out.println("------------------------------------------------------------");
-            System.out.println("1. View Profile");
-            System.out.println("2. Update Profile");
-            System.out.println("3. Download Files");
-            System.out.println("0. Exit");
+            System.out.println("------------------------------------------------------------" + RESET);
+            System.out.println(YELLOW + "1."+ RESET + " View Profile");
+            System.out.println(YELLOW + "2." + RESET + " Update Profile");
+            System.out.println(YELLOW + "0."+ RESET + " Exit");
 
             String choice = scanner.nextLine();
             switch (choice) {
                 case "1":
+                    clearScreen();
                     patient.viewProfile();
+                    clearScreen();
                     break;
                 case "2":
+                    clearScreen();
                     patient.updateProfile();
-                    break;
-                case "3":
-                    // Download Files
+                    clearScreen();
                     break;
                 case "0":
                     quit = true;

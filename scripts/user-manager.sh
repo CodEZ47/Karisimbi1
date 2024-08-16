@@ -190,6 +190,58 @@ function get_life_expectancy() {
     fi
 }
 
+function calculate_statistics() {
+    user_store_file="$USER_STORE"
+    output_csv="$DESTINATION_DIR/life_expectancy_stats.csv"
+    declare -a numbers
+
+    while IFS=',' read -r email uuid role password first_name last_name dob is_hiv_positive diagnosis_date is_on_art art_start_date country_code life_expectancy; do
+        if [ -n "$life_expectancy" ]; then
+            numbers+=("$life_expectancy")
+        fi
+    done < "$user_store_file"
+
+    if [ ${#numbers[@]} -eq 0 ]; then
+        echo "No valid life expectancy values found in the user store."
+        return
+    fi
+
+    count=${#numbers[@]}
+
+    sorted_numbers=($(printf '%s\n' "${numbers[@]}" | sort -n))
+
+    sum=0
+    for num in "${sorted_numbers[@]}"; do
+        sum=$((sum + num))
+    done
+    average=$((sum / count))
+
+    if (( count % 2 == 1 )); then
+        median=${sorted_numbers[$((count / 2))]}
+    else
+        mid=$((count / 2))
+        median=$(((sorted_numbers[mid-1] + sorted_numbers[mid]) / 2))
+    fi
+
+    p25_index=$(( (count - 1) * 25 / 100 ))
+    p25=${sorted_numbers[$p25_index]}
+
+    p75_index=$(( (count - 1) * 75 / 100 ))
+    p75=${sorted_numbers[$p75_index]}
+
+    mkdir -p "$(dirname "$output_csv")"
+    {
+        echo "Statistic,Value"
+        echo "Average,$average"
+        echo "Median,$median"
+        echo "25th Percentile,$p25"
+        echo "75th Percentile,$p75"
+    } > "$output_csv"
+
+    echo "Statistics have been written to $output_csv"
+}
+
+
 
 # Check if user store file exists, if not, create and initialize with first admin
 if [[ ! -f $USER_STORE ]]; then
@@ -231,7 +283,10 @@ case $1 in
     getLifeExpectancy)
         get_life_expectancy $2
         ;;
+    calculateStatistics)
+        calculate_statistics
+        ;;
     *)
-        echo "Usage: $0 {onBoardUser|login|verifyUUID|registerUser|hash_password|registerAdmin|fetchUserByUUID|download_all_user_data|getCountryCode|getLifeExpectancy} args"
+        echo "Usage: $0 {onBoardUser|login|verifyUUID|registerUser|hash_password|registerAdmin|fetchUserByUUID|download_all_user_data|getCountryCode|getLifeExpectancy|calculateStatistics} args"
         ;;
 esac

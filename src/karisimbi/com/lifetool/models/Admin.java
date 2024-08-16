@@ -116,5 +116,27 @@ public class Admin extends User {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    } 
+    }
+
+    public void downloadAnalytics() {
+        try {
+            ProcessBuilder processBuilder = new ProcessBuilder("bash", "-c", "./scripts/user-manager.sh calculateStatistics");
+            processBuilder.redirectErrorStream(true);
+            Process process = processBuilder.start();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+            int exitCode = process.waitFor();
+            if (exitCode == 0) {
+                System.out.println("Analytics downloaded successfully.");
+            } else {
+                System.out.println("Error in downloading analytics. Exit code: " + exitCode);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } 
+    }
 }
